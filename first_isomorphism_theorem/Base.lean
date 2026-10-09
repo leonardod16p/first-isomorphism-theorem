@@ -321,12 +321,44 @@ theorem representante_escolha_nao_importa (f : G →* H) (a b : G) : relacao f a
   symm
   exact lema3
 
+#check Quotient.lift
 
 #check (fun (f : G →* H) (a b : G) => relacao f a b)
 
+def mapa_quociente_imagem (f : G →* H) (q : quociente f) : imagem f :=
+  Quotient.lift (fun a => valor_na_imagem f a) (by
+  intro a b hp
+  apply representante_escolha_nao_importa
+  exact hp
+  ) q
 
+theorem mapa_quociente_imagem_aplica_classe (a : G) (f : G →* H) :
+mapa_quociente_imagem f (projecao_representante f a) = valor_na_imagem f a := by
+  rfl
+
+theorem mapa_quociente_imagem_sobrejetivo (f : G →* H) : ∀ y : imagem f, ∃ (q : quociente f), mapa_quociente_imagem f q = y := by
+  intro y
+  have hy := sobrejetividade f y
+  rcases hy with ⟨a, ha⟩
+  use projecao_representante f a
+  rw [<-ha]
+  exact mapa_quociente_imagem_aplica_classe a f
 
 #check Quotient.inductionOn
+
+
+theorem mapa_quociente_imagem_injetivo (f : G →* H)(q1 q2 : quociente f) : mapa_quociente_imagem f q1 = mapa_quociente_imagem f q2 → q1 = q2 := by
+  induction q1 using Quotient.inductionOn with
+  | h a =>
+    induction q2 using Quotient.inductionOn with
+    | h b =>
+      intro hp
+      apply classes_iguais_de_imagens_iguais
+      rw [mapa_induzido_aplica_classe]
+      rw [mapa_induzido_aplica_classe]
+      have hval := congrArg Subtype.val hp
+      change f a = f b at hval
+      exact hval
 
 --def valor_imagem_mapa_induzido (f : G →* H) (a : G) := { f a : H // f a ∈ imagem }
 
