@@ -432,6 +432,14 @@ def inverso_quociente (f : G →* H) (q : quociente f) : quociente f :=
 
 #check Quotient.sound
 
+theorem inverso_quociente_mul (f : G →* H) : ∀ (q : quociente f), multiplicacao_quociente f (inverso_quociente f q) q = identidade_quociente f := by
+  intro q
+  induction q using Quotient.inductionOn with
+    | h a => change projecao_representante f (a⁻¹ * a) = projecao_representante f 1
+             rw [inv_mul_cancel]
+
+
+
 -- eu n entendi mt bem o que eu tava fznd com o quociente. vale a pena revisar
 -- o que Quotient faz, o que Quotient.mk faz, o que Quotient.lift faz e essas coisas
 
