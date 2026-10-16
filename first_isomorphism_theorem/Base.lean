@@ -473,71 +473,18 @@ def hom_quociente_imagem (f : G →* H) : quociente f →* imagem f where
   map_mul' := mapa_quociente_imagem_mul f
 
 
+noncomputable def primeiro_isomorfismo (f : G →* H) :
+    quociente f ≃* imagem f :=
+  MulEquiv.ofBijective (hom_quociente_imagem f) (by
+    constructor
+    · exact mapa_quociente_imagem_injetivo f
+    · exact mapa_quociente_imagem_sobrejetivo f)
 
-
--- eu n entendi mt bem o que eu tava fznd com o quociente. vale a pena revisar
--- o que Quotient faz, o que Quotient.mk faz, o que Quotient.lift faz e essas coisas
-
-
-
-def mod_2 (a b : Int) : Prop :=
-  a % 2 = b % 2
-
-
-def mod_2_setoid : Setoid ℤ where
-  r := mod_2
-  iseqv := {
-    refl := by
-      intro x
-      change x % 2 = x % 2
-      rfl
-    symm := by
-      intro x y hp
-      change x % 2 = y % 2 at hp
-      change y % 2 = x % 2
-      symm
-      exact hp
-    trans := by
-      intro x y z hp1 hp2
-      change x % 2 = y % 2 at hp1
-      change y % 2 = z % 2 at hp2
-      change x % 2 = z % 2
-      rw [hp1,hp2]
-  }
-
-def mod_2_quociente : Type := Quotient mod_2_setoid
-
-def mod_2_quociente_representante (a : Int) : mod_2_quociente := Quotient.mk mod_2_setoid a
-
-#check mod_2_quociente_representante 2
-
-theorem zero_is_dois : mod_2_quociente_representante 0 = mod_2_quociente_representante 2 := by
-  apply Quotient.sound
-  change 0 % 2 = 2 % 2
+theorem primeiro_isomorfismo_aplica_classe
+    (f : G →* H) (a : G) :
+    (primeiro_isomorfismo f
+      (projecao_representante f a)).val = f a := by
   rfl
-
-theorem zero_is_not_one : ¬(mod_2_quociente_representante 0 = mod_2_quociente_representante 1) := by
-  intro hp
-  have hrel := Quotient.exact hp
-  change 0 % 2 = 1 % 2 at hrel
-  simp at hrel
-
-theorem all_class_equal_zero_or_one :
-  ∀ (a : ℤ ), mod_2_quociente_representante a = mod_2_quociente_representante 0 ∨ mod_2_quociente_representante a = mod_2_quociente_representante 1 :=
-  sorry
-
-def soma_mod_2 (a b : Int) : Int :=
-  a + b % 2
-
-#eval soma_mod_2 3 2
-
-
-#eval 3 % 2 == 0
-
-#eval 3 % 2 == 5 % 2
-
-#check mod_2 3 2
-
 
 end Homomorfismos
 
