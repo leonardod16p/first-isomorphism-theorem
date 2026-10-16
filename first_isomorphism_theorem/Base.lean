@@ -420,6 +420,18 @@ theorem relacao_inversos (f : G →* H) (a b : G) : relacao f a b → relacao f 
   rw [imagem_inverso]
   rw [lema]
 
+def inverso_quociente (f : G →* H) (q : quociente f) : quociente f :=
+  Quotient.lift (fun (a : G) => projecao_representante f (a⁻¹))
+  (by
+  intro a b hp
+  apply Quotient.sound
+  exact relacao_inversos f a b hp
+  )
+  q
+
+
+#check Quotient.sound
+
 -- eu n entendi mt bem o que eu tava fznd com o quociente. vale a pena revisar
 -- o que Quotient faz, o que Quotient.mk faz, o que Quotient.lift faz e essas coisas
 
