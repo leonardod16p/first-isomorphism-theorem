@@ -360,7 +360,22 @@ theorem mapa_quociente_imagem_injetivo (f : G →* H)(q1 q2 : quociente f) : map
       change f a = f b at hval
       exact hval
 
---def valor_imagem_mapa_induzido (f : G →* H) (a : G) := { f a : H // f a ∈ imagem }
+theorem teste2 (f : G →* H) (a a' b b' : G) : relacao f a a' ∧ relacao f b b' → relacao f (a*b) (a'*b') := by
+  intro hp
+  have ha := (mem_nucleo_iff_imagem_igual a a' f).mp hp.1
+  have hb := (mem_nucleo_iff_imagem_igual b b' f).mp hp.2
+  apply (mem_nucleo_iff_imagem_igual (a * b) (a' * b') f).mpr
+  rw [f.map_mul, f.map_mul, ha, hb]
+
+def multiplicacao_quociente (f : G →* H) (q1 : quociente f) (q2 : quociente f) : quociente f :=
+  Quotient.lift₂ (fun (a b : G) => projecao_representante f (a * b)) (by
+    intro a b c d hp1 hp2
+    apply Quotient.sound
+    apply teste2
+    exact ⟨hp1, hp2⟩
+  ) q1 q2
+
+#check Quotient.lift₂
 
 -- eu n entendi mt bem o que eu tava fznd com o quociente. vale a pena revisar
 -- o que Quotient faz, o que Quotient.mk faz, o que Quotient.lift faz e essas coisas
