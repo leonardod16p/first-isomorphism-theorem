@@ -460,6 +460,21 @@ instance (f : G →* H) : Group (quociente f) where
                  change f (a * b) = f a * f b
                  exact f.map_mul a b
 
+theorem mapa_quociente_imagem_um (f : G →* H) : mapa_quociente_imagem f 1 = 1 := by
+  change valor_na_imagem f 1 = 1
+  apply Subtype.ext
+  change f 1 = 1
+  exact f.map_one
+
+
+def hom_quociente_imagem (f : G →* H) : quociente f →* imagem f where
+  toFun := mapa_quociente_imagem f
+  map_one' := mapa_quociente_imagem_um f
+  map_mul' := mapa_quociente_imagem_mul f
+
+
+
+
 -- eu n entendi mt bem o que eu tava fznd com o quociente. vale a pena revisar
 -- o que Quotient faz, o que Quotient.mk faz, o que Quotient.lift faz e essas coisas
 
