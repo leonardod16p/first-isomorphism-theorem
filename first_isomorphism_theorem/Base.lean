@@ -439,6 +439,26 @@ theorem inverso_quociente_mul (f : G →* H) : ∀ (q : quociente f), multiplica
              rw [inv_mul_cancel]
 
 
+instance (f : G →* H) : Group (quociente f) where
+  mul := multiplicacao_quociente f
+  one := identidade_quociente f
+  inv := inverso_quociente f
+  mul_assoc := multiplicacao_quociente_assoc f
+  one_mul := identidade_quociente_mul f
+  mul_one := mul_identidade_quociente f
+  inv_mul_cancel := inverso_quociente_mul f
+
+
+  theorem mapa_quociente_imagem_mul (f : G →* H) :
+  ∀ (q1 q2 : quociente f), mapa_quociente_imagem f (q1 * q2) = mapa_quociente_imagem f q1 * mapa_quociente_imagem f q2 := by
+    intro q1 q2
+    induction q1 using Quotient.inductionOn with
+      | h a =>
+      induction q2 using Quotient.inductionOn with
+        | h b => change valor_na_imagem f (a * b) = valor_na_imagem f a * valor_na_imagem f b
+                 apply Subtype.ext
+                 change f (a * b) = f a * f b
+                 exact f.map_mul a b
 
 -- eu n entendi mt bem o que eu tava fznd com o quociente. vale a pena revisar
 -- o que Quotient faz, o que Quotient.mk faz, o que Quotient.lift faz e essas coisas
