@@ -377,6 +377,25 @@ def multiplicacao_quociente (f : G →* H) (q1 : quociente f) (q2 : quociente f)
 
 #check Quotient.lift₂
 
+
+theorem multiplicacao_quociente_aplica_classes (f : G →* H) :
+∀ (a b : G), multiplicacao_quociente f (projecao_representante f a) (projecao_representante f b) = projecao_representante f (a * b) := by
+  intro a b
+  rfl
+
+theorem multiplicacao_quociente_assoc (f : G →* H) : ∀ (q1 q2 q3 : quociente f),
+multiplicacao_quociente f (multiplicacao_quociente f q1 q2) q3 = multiplicacao_quociente f q1 (multiplicacao_quociente f q2 q3) := by
+  intro q1 q2 q3
+  induction q1 using Quotient.inductionOn with
+  | h a =>
+    induction q2 using Quotient.inductionOn with
+    | h b =>
+      induction q3 using Quotient.inductionOn with
+      | h c =>
+              change projecao_representante f ((a * b) * c) = projecao_representante f (a * (b * c))
+              rw [mul_assoc]
+
+
 -- eu n entendi mt bem o que eu tava fznd com o quociente. vale a pena revisar
 -- o que Quotient faz, o que Quotient.mk faz, o que Quotient.lift faz e essas coisas
 
