@@ -395,6 +395,22 @@ multiplicacao_quociente f (multiplicacao_quociente f q1 q2) q3 = multiplicacao_q
               change projecao_representante f ((a * b) * c) = projecao_representante f (a * (b * c))
               rw [mul_assoc]
 
+def identidade_quociente (f : G →* H) : quociente f :=
+  projecao_representante f 1
+
+theorem identidade_quociente_mul (f : G →* H) : ∀ (q : quociente f), multiplicacao_quociente f (identidade_quociente f) q = q := by
+  intro q
+  induction q using Quotient.inductionOn with
+  | h a => change projecao_representante f (1 * a) = projecao_representante f a
+           rw[one_mul]
+
+theorem mul_identidade_quociente (f : G →* H) : ∀ (q : quociente f), multiplicacao_quociente f q (identidade_quociente f) = q := by
+  intro q
+  induction q using Quotient.inductionOn with
+  | h a => change projecao_representante f (a*1) = projecao_representante f a
+           rw[mul_one]
+
+
 
 -- eu n entendi mt bem o que eu tava fznd com o quociente. vale a pena revisar
 -- o que Quotient faz, o que Quotient.mk faz, o que Quotient.lift faz e essas coisas
