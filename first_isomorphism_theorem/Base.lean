@@ -410,10 +410,19 @@ theorem mul_identidade_quociente (f : G →* H) : ∀ (q : quociente f), multipl
   | h a => change projecao_representante f (a*1) = projecao_representante f a
            rw[mul_one]
 
-
+theorem relacao_inversos (f : G →* H) (a b : G) : relacao f a b → relacao f a⁻¹ b⁻¹ := by
+  intro q
+  change (a⁻¹)⁻¹ * b⁻¹ ∈ nucleo f
+  change a⁻¹ * b ∈ nucleo f at q
+  have lema := (mem_nucleo_iff_imagem_igual a b f).mp q
+  apply (mem_nucleo_iff_imagem_igual a⁻¹ b⁻¹ f).mpr
+  rw [imagem_inverso]
+  rw [imagem_inverso]
+  rw [lema]
 
 -- eu n entendi mt bem o que eu tava fznd com o quociente. vale a pena revisar
 -- o que Quotient faz, o que Quotient.mk faz, o que Quotient.lift faz e essas coisas
+
 
 
 def mod_2 (a b : Int) : Prop :=
